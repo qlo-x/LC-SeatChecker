@@ -7,7 +7,785 @@
   <link rel="stylesheet" href="Style.css">
 </head>
 <body>
-  <h1>LC-SeatChecker</h1>
+  <!-- ===== ヘッダー：凡例 / タイトル / 現在時刻 ===== -->
+  <header>
+    <ul class="legend">
+      <li><span class="legend-box free"></span>空き</li>
+      <li><span class="legend-box reserved"></span>予約</li>
+      <li><span class="legend-box in-use"></span>使用中</li>
+    </ul>
+    <h1>利用状況</h1>
+    <div id="time">--:--</div>
+  </header>
+
+  <!-- ===== 座席とタイムライン ===== -->
+  <main id="seat-map">
+
+    <!-- 左の列：上から 10, 9, ... 1 番席 -->
+    <div class="seat-column">
+      <div class="seat seat-left" id="seat10">10</div>
+      <div class="seat seat-left" id="seat9">9</div>
+      <div class="seat seat-left" id="seat8">8</div>
+      <div class="seat seat-left" id="seat7">7</div>
+      <div class="seat seat-left" id="seat6">6</div>
+      <div class="seat seat-left" id="seat5">5</div>
+      <div class="seat seat-left" id="seat4">4</div>
+      <div class="seat seat-left" id="seat3">3</div>
+      <div class="seat seat-left" id="seat2">2</div>
+      <div class="seat seat-left" id="seat1">1</div>
+    </div>
+
+    <!-- 右側：上の行（11〜17番席）と、その下のタイムライン -->
+    <div class="seat-right">
+
+      <!-- 上の行：左から 11, 12, ... 17 番席 -->
+      <div class="seat-row">
+        <div class="seat seat-top" id="seat11">11</div>
+        <div class="seat seat-top" id="seat12">12</div>
+        <div class="seat seat-top" id="seat13">13</div>
+        <div class="seat seat-top" id="seat14">14</div>
+        <div class="seat seat-top" id="seat15">15</div>
+        <div class="seat seat-top" id="seat16">16</div>
+        <div class="seat seat-top" id="seat17">17</div>
+      </div>
+
+      <!-- タイムライン：1席につきバー2本（09〜15時 / 15〜21時） -->
+      <section id="timeline-area">
+
+        <!-- 1番席 -->
+        <div class="timeline" id="timeline1">
+          <div class="timeline-number">1</div>
+          <div class="timeline-bars">
+            <div class="bar" data-start-hour="9">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>09</span>
+                <span>10</span>
+                <span>11</span>
+                <span>12</span>
+                <span>13</span>
+                <span>14</span>
+              </div>
+            </div>
+            <div class="bar" data-start-hour="15">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>15</span>
+                <span>16</span>
+                <span>17</span>
+                <span>18</span>
+                <span>19</span>
+                <span>20</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2番席 -->
+        <div class="timeline" id="timeline2">
+          <div class="timeline-number">2</div>
+          <div class="timeline-bars">
+            <div class="bar" data-start-hour="9">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>09</span>
+                <span>10</span>
+                <span>11</span>
+                <span>12</span>
+                <span>13</span>
+                <span>14</span>
+              </div>
+            </div>
+            <div class="bar" data-start-hour="15">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>15</span>
+                <span>16</span>
+                <span>17</span>
+                <span>18</span>
+                <span>19</span>
+                <span>20</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3番席 -->
+        <div class="timeline" id="timeline3">
+          <div class="timeline-number">3</div>
+          <div class="timeline-bars">
+            <div class="bar" data-start-hour="9">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>09</span>
+                <span>10</span>
+                <span>11</span>
+                <span>12</span>
+                <span>13</span>
+                <span>14</span>
+              </div>
+            </div>
+            <div class="bar" data-start-hour="15">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>15</span>
+                <span>16</span>
+                <span>17</span>
+                <span>18</span>
+                <span>19</span>
+                <span>20</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4番席 -->
+        <div class="timeline" id="timeline4">
+          <div class="timeline-number">4</div>
+          <div class="timeline-bars">
+            <div class="bar" data-start-hour="9">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>09</span>
+                <span>10</span>
+                <span>11</span>
+                <span>12</span>
+                <span>13</span>
+                <span>14</span>
+              </div>
+            </div>
+            <div class="bar" data-start-hour="15">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>15</span>
+                <span>16</span>
+                <span>17</span>
+                <span>18</span>
+                <span>19</span>
+                <span>20</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5番席 -->
+        <div class="timeline" id="timeline5">
+          <div class="timeline-number">5</div>
+          <div class="timeline-bars">
+            <div class="bar" data-start-hour="9">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>09</span>
+                <span>10</span>
+                <span>11</span>
+                <span>12</span>
+                <span>13</span>
+                <span>14</span>
+              </div>
+            </div>
+            <div class="bar" data-start-hour="15">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>15</span>
+                <span>16</span>
+                <span>17</span>
+                <span>18</span>
+                <span>19</span>
+                <span>20</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6番席 -->
+        <div class="timeline" id="timeline6">
+          <div class="timeline-number">6</div>
+          <div class="timeline-bars">
+            <div class="bar" data-start-hour="9">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>09</span>
+                <span>10</span>
+                <span>11</span>
+                <span>12</span>
+                <span>13</span>
+                <span>14</span>
+              </div>
+            </div>
+            <div class="bar" data-start-hour="15">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>15</span>
+                <span>16</span>
+                <span>17</span>
+                <span>18</span>
+                <span>19</span>
+                <span>20</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7番席 -->
+        <div class="timeline" id="timeline7">
+          <div class="timeline-number">7</div>
+          <div class="timeline-bars">
+            <div class="bar" data-start-hour="9">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>09</span>
+                <span>10</span>
+                <span>11</span>
+                <span>12</span>
+                <span>13</span>
+                <span>14</span>
+              </div>
+            </div>
+            <div class="bar" data-start-hour="15">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>15</span>
+                <span>16</span>
+                <span>17</span>
+                <span>18</span>
+                <span>19</span>
+                <span>20</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8番席 -->
+        <div class="timeline" id="timeline8">
+          <div class="timeline-number">8</div>
+          <div class="timeline-bars">
+            <div class="bar" data-start-hour="9">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>09</span>
+                <span>10</span>
+                <span>11</span>
+                <span>12</span>
+                <span>13</span>
+                <span>14</span>
+              </div>
+            </div>
+            <div class="bar" data-start-hour="15">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>15</span>
+                <span>16</span>
+                <span>17</span>
+                <span>18</span>
+                <span>19</span>
+                <span>20</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 9番席 -->
+        <div class="timeline" id="timeline9">
+          <div class="timeline-number">9</div>
+          <div class="timeline-bars">
+            <div class="bar" data-start-hour="9">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>09</span>
+                <span>10</span>
+                <span>11</span>
+                <span>12</span>
+                <span>13</span>
+                <span>14</span>
+              </div>
+            </div>
+            <div class="bar" data-start-hour="15">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>15</span>
+                <span>16</span>
+                <span>17</span>
+                <span>18</span>
+                <span>19</span>
+                <span>20</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 10番席 -->
+        <div class="timeline" id="timeline10">
+          <div class="timeline-number">10</div>
+          <div class="timeline-bars">
+            <div class="bar" data-start-hour="9">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>09</span>
+                <span>10</span>
+                <span>11</span>
+                <span>12</span>
+                <span>13</span>
+                <span>14</span>
+              </div>
+            </div>
+            <div class="bar" data-start-hour="15">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>15</span>
+                <span>16</span>
+                <span>17</span>
+                <span>18</span>
+                <span>19</span>
+                <span>20</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 11番席 -->
+        <div class="timeline" id="timeline11">
+          <div class="timeline-number">11</div>
+          <div class="timeline-bars">
+            <div class="bar" data-start-hour="9">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>09</span>
+                <span>10</span>
+                <span>11</span>
+                <span>12</span>
+                <span>13</span>
+                <span>14</span>
+              </div>
+            </div>
+            <div class="bar" data-start-hour="15">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>15</span>
+                <span>16</span>
+                <span>17</span>
+                <span>18</span>
+                <span>19</span>
+                <span>20</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 12番席 -->
+        <div class="timeline" id="timeline12">
+          <div class="timeline-number">12</div>
+          <div class="timeline-bars">
+            <div class="bar" data-start-hour="9">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>09</span>
+                <span>10</span>
+                <span>11</span>
+                <span>12</span>
+                <span>13</span>
+                <span>14</span>
+              </div>
+            </div>
+            <div class="bar" data-start-hour="15">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>15</span>
+                <span>16</span>
+                <span>17</span>
+                <span>18</span>
+                <span>19</span>
+                <span>20</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 13番席 -->
+        <div class="timeline" id="timeline13">
+          <div class="timeline-number">13</div>
+          <div class="timeline-bars">
+            <div class="bar" data-start-hour="9">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>09</span>
+                <span>10</span>
+                <span>11</span>
+                <span>12</span>
+                <span>13</span>
+                <span>14</span>
+              </div>
+            </div>
+            <div class="bar" data-start-hour="15">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>15</span>
+                <span>16</span>
+                <span>17</span>
+                <span>18</span>
+                <span>19</span>
+                <span>20</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 14番席 -->
+        <div class="timeline" id="timeline14">
+          <div class="timeline-number">14</div>
+          <div class="timeline-bars">
+            <div class="bar" data-start-hour="9">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>09</span>
+                <span>10</span>
+                <span>11</span>
+                <span>12</span>
+                <span>13</span>
+                <span>14</span>
+              </div>
+            </div>
+            <div class="bar" data-start-hour="15">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>15</span>
+                <span>16</span>
+                <span>17</span>
+                <span>18</span>
+                <span>19</span>
+                <span>20</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 15番席 -->
+        <div class="timeline" id="timeline15">
+          <div class="timeline-number">15</div>
+          <div class="timeline-bars">
+            <div class="bar" data-start-hour="9">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>09</span>
+                <span>10</span>
+                <span>11</span>
+                <span>12</span>
+                <span>13</span>
+                <span>14</span>
+              </div>
+            </div>
+            <div class="bar" data-start-hour="15">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>15</span>
+                <span>16</span>
+                <span>17</span>
+                <span>18</span>
+                <span>19</span>
+                <span>20</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 16番席 -->
+        <div class="timeline" id="timeline16">
+          <div class="timeline-number">16</div>
+          <div class="timeline-bars">
+            <div class="bar" data-start-hour="9">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>09</span>
+                <span>10</span>
+                <span>11</span>
+                <span>12</span>
+                <span>13</span>
+                <span>14</span>
+              </div>
+            </div>
+            <div class="bar" data-start-hour="15">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>15</span>
+                <span>16</span>
+                <span>17</span>
+                <span>18</span>
+                <span>19</span>
+                <span>20</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 17番席 -->
+        <div class="timeline" id="timeline17">
+          <div class="timeline-number">17</div>
+          <div class="timeline-bars">
+            <div class="bar" data-start-hour="9">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>09</span>
+                <span>10</span>
+                <span>11</span>
+                <span>12</span>
+                <span>13</span>
+                <span>14</span>
+              </div>
+            </div>
+            <div class="bar" data-start-hour="15">
+              <div class="bar-track">
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+                <div class="hour-cell"></div>
+              </div>
+              <div class="bar-labels">
+                <span>15</span>
+                <span>16</span>
+                <span>17</span>
+                <span>18</span>
+                <span>19</span>
+                <span>20</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </main>
 
   <script src="app.js" defer></script>
 </body>
