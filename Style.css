@@ -127,7 +127,7 @@ h1 {
 	place-items: center;
 	min-width: 0;
 	border: 1px solid rgba(53, 67, 53, 0.32);
-	background-color: var(--free);
+	background-color: #e8ece5;
 	color: #203024;
 	font-size: clamp(12px, 3.4vw, 18px);
 	font-weight: 700;
@@ -156,15 +156,6 @@ h1 {
 
 .in-use {
 	background-color: var(--in-use);
-}
-
-#seat1,
-#seat10 {
-	background-color: var(--in-use);
-}
-
-#seat17 {
-	background-color: var(--reserved);
 }
 
 .legend-box.free,
@@ -255,34 +246,6 @@ h1 {
 	bottom: 0;
 	min-width: 1px;
 	opacity: 0.93;
-}
-
-#timeline1 .bar:first-child .bar-track::before,
-#timeline1 .bar:first-child .bar-track::after,
-#timeline17 .bar:nth-child(2) .bar-track::after {
-	position: absolute;
-	z-index: 0;
-	top: 0;
-	bottom: 0;
-	content: "";
-}
-
-#timeline1 .bar:first-child .bar-track::before {
-	left: 0;
-	width: 16.6667%;
-	background: var(--past);
-}
-
-#timeline1 .bar:first-child .bar-track::after {
-	left: 16.6667%;
-	width: 16.6667%;
-	background: var(--in-use);
-}
-
-#timeline17 .bar:nth-child(2) .bar-track::after {
-	left: 66.6667%;
-	width: 33.3333%;
-	background: var(--reserved);
 }
 
 .segment.past {
