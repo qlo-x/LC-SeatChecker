@@ -1,5 +1,3 @@
-// LC-SeatChecker の処理
-
 const BAR_TOTAL_MINUTES = 360;
 
 const seatSchedules = [
