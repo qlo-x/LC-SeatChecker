@@ -790,6 +790,40 @@
     </div>
   </main>
 
+  <!-- ===== 登録用ポップアップ（PCのみ。座席をクリックすると表示） ===== -->
+  <div class="popup" id="popup" hidden>
+    <div class="popup-header">
+      <p class="popup-title"><span id="popup-seat-number"></span>番席</p>
+      <button type="button" class="popup-close" id="popup-close" aria-label="閉じる">×</button>
+    </div>
+
+    <!-- 1. クイックアクション（空席時：今すぐ利用・予約 / 利用時：返却・延長・予約） -->
+    <div class="popup-panel" id="quick-panel">
+      <button type="button" class="action-button use-now" id="use-now-button">今すぐ利用</button>
+      <button type="button" class="action-button return" id="return-button">返却</button>
+      <button type="button" class="action-button extend" id="extend-button">延長</button>
+      <button type="button" class="action-button reserve" id="reserve-button">予約</button>
+    </div>
+
+    <!-- 2. 予約登録（「予約」を押したときに 1 と入れ替えで表示） -->
+    <div class="popup-panel" id="reserve-panel" hidden>
+      <form class="reserve-form" id="reserve-form">
+        <label class="reserve-label" for="reserve-start">予約開始時間</label>
+        <input type="time" class="reserve-input" id="reserve-start" min="09:00" max="21:00" required>
+        <button type="submit" class="action-button register" id="reserve-submit">登録</button>
+      </form>
+
+      <h2 class="reservation-list-title">予約一覧</h2>
+      <!-- 予約1件ごとに <li> を JS で追加する -->
+      <ol class="reservation-list" id="reservation-list"></ol>
+
+      <button type="button" class="back-button" id="back-button">戻る</button>
+    </div>
+
+    <!-- エラーなどのメッセージ（JS で文字を入れる） -->
+    <p class="popup-message" id="popup-message" aria-live="polite"></p>
+  </div>
+
   <script src="app.js" defer></script>
 </body>
 </html>
