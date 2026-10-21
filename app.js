@@ -3,23 +3,23 @@
 const BAR_TOTAL_MINUTES = 360;
 
 const seatSchedules = [
-  { id: 1, intervals: [{ state: 'reserved', start: 9 * 60, end: 10 * 60 + 30 }] },
-  { id: 2, intervals: [{ state: 'in-use', start: 9 * 60 + 15, end: 11 * 60 + 30 }] },
-  { id: 3, intervals: [{ state: 'reserved', start: 12 * 60, end: 13 * 60 + 30 }] },
-  { id: 4, intervals: [{ state: 'in-use', start: 14 * 60, end: 16 * 60 }] },
-  { id: 5, intervals: [{ state: 'reserved', start: 15 * 60, end: 17 * 60 + 15 }] },
-  { id: 6, intervals: [{ state: 'in-use', start: 10 * 60, end: 12 * 60 + 15 }] },
-  { id: 7, intervals: [{ state: 'reserved', start: 16 * 60, end: 18 * 60 }] },
+  { id: 1, intervals: [{ state: 'reserved', start: 9 * 60, end: 11 * 60 }] },
+  { id: 2, intervals: [{ state: 'in-use', start: 9 * 60, end: 11 * 60 }] },
+  { id: 3, intervals: [{ state: 'reserved', start: 11 * 60, end: 13 * 60 }] },
+  { id: 4, intervals: [{ state: 'in-use', start: 13 * 60, end: 15 * 60 }] },
+  { id: 5, intervals: [{ state: 'reserved', start: 15 * 60, end: 17 * 60 }] },
+  { id: 6, intervals: [{ state: 'in-use', start: 11 * 60, end: 13 * 60 }] },
+  { id: 7, intervals: [{ state: 'reserved', start: 15 * 60, end: 17 * 60 }] },
   { id: 8, intervals: [] },
-  { id: 9, intervals: [{ state: 'reserved', start: 11 * 60, end: 13 * 60 }] },
-  { id: 10, intervals: [{ state: 'in-use', start: 17 * 60 + 30, end: 19 * 60 }] },
+  { id: 9, intervals: [{ state: 'reserved', start: 9 * 60, end: 11 * 60 }] },
+  { id: 10, intervals: [{ state: 'in-use', start: 17 * 60, end: 19 * 60 }] },
   { id: 11, intervals: [] },
-  { id: 12, intervals: [{ state: 'reserved', start: 9 * 60 + 30, end: 11 * 60 }] },
-  { id: 13, intervals: [{ state: 'in-use', start: 12 * 60 + 30, end: 14 * 60 }] },
+  { id: 12, intervals: [{ state: 'reserved', start: 9 * 60, end: 11 * 60 }] },
+  { id: 13, intervals: [{ state: 'in-use', start: 13 * 60, end: 15 * 60 }] },
   { id: 14, intervals: [] },
-  { id: 15, intervals: [{ state: 'reserved', start: 15 * 60 + 30, end: 17 * 60 + 45 }] },
-  { id: 16, intervals: [{ state: 'in-use', start: 18 * 60, end: 20 * 60 + 30 }] },
-  { id: 17, intervals: [{ state: 'reserved', start: 9 * 60, end: 10 * 60 + 45 }] },
+  { id: 15, intervals: [{ state: 'reserved', start: 15 * 60, end: 17 * 60 }] },
+  { id: 16, intervals: [{ state: 'in-use', start: 17 * 60, end: 19 * 60 }] },
+  { id: 17, intervals: [{ state: 'reserved', start: 9 * 60, end: 11 * 60 }] },
 ];
 
 function getNowInJapan() {
@@ -64,11 +64,7 @@ function updateSeatStates() {
     });
 
     const state = getSeatStateByNow(seatId, nowMinutes);
-    if (state) {
-      seatEl.classList.add(state);
-    } else {
-      seatEl.classList.add('free');
-    }
+    seatEl.classList.add(state || 'free');
   }
 }
 
@@ -85,13 +81,6 @@ function addSegment(barTrack, leftPercent, widthPercent, className) {
   barTrack.appendChild(segment);
 }
 
-function getBoundaryInBar(intervalStart, intervalEnd, barStartMinutes, barEndMinutes) {
-  return {
-    start: Math.max(intervalStart, barStartMinutes),
-    end: Math.min(intervalEnd, barEndMinutes),
-  };
-}
-
 function updateTimelineBar(seatId, bar, nowMinutes) {
   const barTrack = bar.querySelector('.bar-track');
   if (!barTrack) return;
@@ -102,29 +91,32 @@ function updateTimelineBar(seatId, bar, nowMinutes) {
   const barStartMinutes = barStartHour * 60;
   const barEndMinutes = barStartMinutes + BAR_TOTAL_MINUTES;
 
+  const pastWidth = Math.max(0, Math.min(nowMinutes, barEndMinutes) - barStartMinutes);
+  if (pastWidth > 0) {
+    addSegment(barTrack, 0, (pastWidth / BAR_TOTAL_MINUTES) * 100, 'past');
+  }
+
   const seat = seatSchedules.find((item) => item.id === seatId);
   if (!seat) return;
 
   seat.intervals.forEach((interval) => {
-    const overlap = getBoundaryInBar(interval.start, interval.end, barStartMinutes, barEndMinutes);
-    if (overlap.start >= overlap.end) return;
+    const overlapStart = Math.max(interval.start, barStartMinutes);
+    const overlapEnd = Math.min(interval.end, barEndMinutes);
+    if (overlapStart >= overlapEnd) return;
+    if (interval.end <= nowMinutes) return;
 
-    const pastStart = Math.max(overlap.start, barStartMinutes);
-    const pastEnd = Math.min(nowMinutes, overlap.end);
+    let drawStart = overlapStart;
+    let drawEnd = overlapEnd;
 
-    if (pastEnd > pastStart) {
-      const leftPercent = ((pastStart - barStartMinutes) / BAR_TOTAL_MINUTES) * 100;
-      const widthPercent = ((pastEnd - pastStart) / BAR_TOTAL_MINUTES) * 100;
-      addSegment(barTrack, leftPercent, widthPercent, 'past');
+    if (interval.start < nowMinutes && interval.end > nowMinutes) {
+      drawStart = nowMinutes;
     }
 
-    const activeStart = Math.max(overlap.start, nowMinutes);
-    const activeEnd = overlap.end;
-    if (activeStart < activeEnd) {
-      const leftPercent = ((activeStart - barStartMinutes) / BAR_TOTAL_MINUTES) * 100;
-      const widthPercent = ((activeEnd - activeStart) / BAR_TOTAL_MINUTES) * 100;
-      addSegment(barTrack, leftPercent, widthPercent, interval.state);
-    }
+    if (drawStart >= drawEnd) return;
+
+    const leftPercent = ((drawStart - barStartMinutes) / BAR_TOTAL_MINUTES) * 100;
+    const widthPercent = ((drawEnd - drawStart) / BAR_TOTAL_MINUTES) * 100;
+    addSegment(barTrack, leftPercent, widthPercent, interval.state);
   });
 }
 
