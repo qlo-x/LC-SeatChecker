@@ -82,8 +82,21 @@ h1 {
 	white-space: nowrap;
 }
 
-#time {
+.clock {
+	display: flex;
+	align-items: baseline;
 	justify-self: end;
+	gap: 4px;
+	white-space: nowrap;
+}
+
+.clock-label {
+	color: #566156;
+	font-size: clamp(10px, 2.8vw, 13px);
+	font-weight: 700;
+}
+
+#time {
 	color: #38483b;
 	font-size: clamp(15px, 4vw, 20px);
 	font-variant-numeric: tabular-nums;
@@ -326,6 +339,13 @@ h1 {
 
 	.legend {
 		font-size: 10px;
+	}
+
+	/* 幅が狭いときは「現在時刻」を時刻の上に置く */
+	.clock {
+		flex-direction: column;
+		align-items: flex-end;
+		gap: 0;
 	}
 
 	#seat-map {
